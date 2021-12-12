@@ -12,7 +12,7 @@ WORKDIR /app
 
 # hadolint ignore=DL3018
 RUN \
-    apk add --no-cache nodejs nodejs-npm \
+    apk add --no-cache nodejs npm \
     && rm -rf /var/lib/apt/lists/* \
     && npm i --only=prod
 
