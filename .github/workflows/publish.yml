@@ -1,0 +1,120 @@
+name: Docker build and publish
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build-amd64:
+    name: Build and publish amd64 image
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Get version
+        env:
+          TAG_NAME: ${{ github.event.release.tag_name }}
+        run: echo "VERSION=${TAG_NAME#v}" >> $GITHUB_ENV
+      - name: Patch files
+        uses: onlyutkarsh/patch-files-action@v1.0.1
+        with:
+          files: |
+            telegram-bot-amazon/config.json
+          patch-syntax: |
+            = /version => "${{ env.VERSION }}"
+      - name: publish amd64 docker files
+        if: github.event_name != 'pull_request'
+        run: docker run --rm --privileged -v /var/run/docker.sock:/var/run/docker.sock -v ~/.docker:/root/.docker -v "$(pwd)":/data homeassistant/amd64-builder	-t telegram-bot-amazon --amd64 --release-tag --docker-user marciogranzotto --docker-password ${{ secrets.DOCKER_PASSWORD }}
+
+  build-aarch64:
+    name: Build and publish aarch64 image
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Get version
+        env:
+          TAG_NAME: ${{ github.event.release.tag_name }}
+        run: echo "VERSION=${TAG_NAME#v}" >> $GITHUB_ENV
+      - name: Patch files
+        uses: onlyutkarsh/patch-files-action@v1.0.1
+        with:
+          files: |
+            telegram-bot-amazon/config.json
+          patch-syntax: |
+            = /version => "${{ env.VERSION }}"
+
+      - name: publish aarch64 docker files
+        if: github.event_name != 'pull_request'
+        run: docker run --rm --privileged -v /var/run/docker.sock:/var/run/docker.sock -v ~/.docker:/root/.docker -v "$(pwd)":/data homeassistant/amd64-builder	-t telegram-bot-amazon --aarch64 --release-tag --docker-user marciogranzotto --docker-password ${{ secrets.DOCKER_PASSWORD }}
+
+  build-armhf:
+    name: Build and publish armhf image
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Get version
+        env:
+          TAG_NAME: ${{ github.event.release.tag_name }}
+        run: echo "VERSION=${TAG_NAME#v}" >> $GITHUB_ENV
+      - name: Patch files
+        uses: onlyutkarsh/patch-files-action@v1.0.1
+        with:
+          files: |
+            telegram-bot-amazon/config.json
+          patch-syntax: |
+            = /version => "${{ env.VERSION }}"
+
+      - name: publish armhf docker files
+        if: github.event_name != 'pull_request'
+        run: docker run --rm --privileged -v /var/run/docker.sock:/var/run/docker.sock -v ~/.docker:/root/.docker -v "$(pwd)":/data homeassistant/amd64-builder	-t telegram-bot-amazon --armhf --release-tag --docker-user marciogranzotto --docker-password ${{ secrets.DOCKER_PASSWORD }}
+
+  build-armv7:
+    name: Build and publish armv7 image
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Get version
+        env:
+          TAG_NAME: ${{ github.event.release.tag_name }}
+        run: echo "VERSION=${TAG_NAME#v}" >> $GITHUB_ENV
+      - name: Patch files
+        uses: onlyutkarsh/patch-files-action@v1.0.1
+        with:
+          files: |
+            telegram-bot-amazon/config.json
+          patch-syntax: |
+            = /version => "${{ env.VERSION }}"
+
+      - name: publish armv7 docker files
+        if: github.event_name != 'pull_request'
+        run: docker run --rm --privileged -v /var/run/docker.sock:/var/run/docker.sock -v ~/.docker:/root/.docker -v "$(pwd)":/data homeassistant/amd64-builder	-t telegram-bot-amazon --armv7 --release-tag --docker-user marciogranzotto --docker-password ${{ secrets.DOCKER_PASSWORD }}
+
+  build-i386:
+    name: Build and publish i386 image
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Get version
+        env:
+          TAG_NAME: ${{ github.event.release.tag_name }}
+        run: echo "VERSION=${TAG_NAME#v}" >> $GITHUB_ENV
+      - name: Patch files
+        uses: onlyutkarsh/patch-files-action@v1.0.1
+        with:
+          files: |
+            telegram-bot-amazon/config.json
+          patch-syntax: |
+            = /version => "${{ env.VERSION }}"
+
+      - name: publish i386 docker files
+        if: github.event_name != 'pull_request'
+        run: docker run --rm --privileged -v /var/run/docker.sock:/var/run/docker.sock -v ~/.docker:/root/.docker -v "$(pwd)":/data homeassistant/amd64-builder	-t telegram-bot-amazon --i386 --release-tag --docker-user marciogranzotto --docker-password ${{ secrets.DOCKER_PASSWORD }}
+
+  update-main-repo:
+    needs: [build-amd64, build-aarch64, build-armhf, build-armv7, build-i386]
+    name: Update addons repository
+    runs-on: ubuntu-latest
+    container:
+      image: hassioaddons/repository-updater:latest
+    steps:
+      - name: upload
+        run: repository-updater --token ${{ secrets.GIT_TOKEN }} --repository marciogranzotto/addons-repository --addon telegram-bot-amazon
