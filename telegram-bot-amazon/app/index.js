@@ -8,12 +8,14 @@ License: MIT
 const TelegramBot = require("node-telegram-bot-api");
 const fetch = require("node-fetch");
 
-const fullURLRegex = /https?:\/\/(([^\s]*)\.)?amazon\.([a-z.]{2,5}){1,2}(\/d\/([^\s]*)|\/([^\s]*)\/?(?:dp|o|gp|-)\/)(aw\/d\/|product\/)?(B[0-9]{2}[0-9A-Z]{7}|[0-9]{9}(?:X|[0-9]))([^\s]*)/gi;
+const fullURLRegex =
+  /https?:\/\/(([^\s]*)\.)?amazon\.([a-z.]{2,5}){1,2}(\/d\/([^\s]*)|\/([^\s]*)\/?(?:dp|o|gp|-)\/)(aw\/d\/|product\/)?(B[0-9]{2}[0-9A-Z]{7}|[0-9]{9}(?:X|[0-9]))([^\s]*)/gi;
 const shortURLRegex = /https?:\/\/(([^\s]*)\.)?amzn\.to\/([0-9A-Za-z]+)/gi;
-const URLRegex = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)/gi;
+const URLRegex =
+  /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)/gi;
 
 function regExpEscape(literal_string) {
-  return literal_string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  return literal_string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
 if (!process.env.TELEGRAM_BOT_TOKEN) {
