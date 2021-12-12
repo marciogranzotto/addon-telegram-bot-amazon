@@ -23,6 +23,7 @@ RUN \
     && curl -sL "https://deb.nodesource.com/setup_15.x" | bash - \
     && apt-get update \
     && apt-get install -y --no-install-recommends \
+    # hadolint ignore=DDL3008 
         nodejs \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* \
