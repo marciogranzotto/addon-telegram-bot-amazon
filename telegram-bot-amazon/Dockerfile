@@ -1,31 +1,18 @@
-ARG BUILD_FROM
+ARG BUILD_FROM=ghcr.io/hassio-addons/base/amd64:11.0.0
 # hadolint ignore=DL3006
-FROM $BUILD_FROM
+FROM ${BUILD_FROM}
+
+ENV LANG C.UTF-8
 
 # Set shell
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
-ENV LANG C.UTF-8
 
 COPY app /app
 WORKDIR /app
 
-# hadolint ignore=DL3008
+# hadolint ignore=DL3018
 RUN \
-    URL="http://archive.ubuntu.com/ubuntu/" \
-    && if [ "${BUILD_ARCH}" = "aarch64" ]; then \
-        URL="http://ports.ubuntu.com/ubuntu-ports/"; \
-    fi \
-    && echo "deb ${URL} bionic universe" \
-        > /etc/apt/sources.list.d/bionic-universe.list \
-    \
-    && echo "deb ${URL} bionic main" \
-        > /etc/apt/sources.list.d/bionic-main.list \
-    \
-    && curl -sL "https://deb.nodesource.com/setup_15.x" | bash - \
-    && apt-get update \
-    && apt-get install -y --no-install-recommends \
-        nodejs \
-    && apt-get clean \
+    apk add --no-cache nodejs nodejs-npm \
     && rm -rf /var/lib/apt/lists/* \
     && npm i --only=prod
 
