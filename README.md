@@ -1,6 +1,7 @@
 [![](https://img.shields.io/github/issues/marciogranzotto/addon-telegram-bot-amazon.svg)](https://github.com/marciogranzotto/addon-telegram-bot-amazon/issues) [![](https://img.shields.io/github/issues-pr-raw/marciogranzotto/addon-telegram-bot-amazon.svg)](https://github.com/marciogranzotto/addon-telegram-bot-amazon/pulls) [![](https://img.shields.io/docker/pulls/marciogranzotto/addon-telegram-bot-amazon.svg)](https://hub.docker.com/r/marciogranzotto/addon-telegram-bot-amazon) [![](https://img.shields.io/docker/cloud/build/marciogranzotto/addon-telegram-bot-amazon.svg)](https://hub.docker.com/r/marciogranzotto/addon-telegram-bot-amazon) [![](https://img.shields.io/docker/image-size/marciogranzotto/addon-telegram-bot-amazon/latest.svg)](https://hub.docker.com/r/marciogranzotto/addon-telegram-bot-amazon)
 
 # addon-telegram-bot-amazon
+
 This is a Home Assistant Add-On conversion of [LucaTNT/telegram-bot-amazon](https://github.com/LucaTNT/telegram-bot-amazon)
 
 ## About

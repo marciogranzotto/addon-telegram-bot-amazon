@@ -13,7 +13,7 @@ const shortURLRegex = /https?:\/\/(([^\s]*)\.)?amzn\.to\/([0-9A-Za-z]+)/gi;
 const URLRegex = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)/gi;
 
 function regExpEscape(literal_string) {
-  return literal_string.replace(/[-[\]{}()*+!<=:?.\/\\^$|#\s,]/g, '\\$&');
+  return literal_string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
 if (!process.env.TELEGRAM_BOT_TOKEN) {

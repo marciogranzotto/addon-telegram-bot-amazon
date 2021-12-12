@@ -14,7 +14,7 @@ telegram_token: your_very_secret_token
 amazon_tag: your_amazon_tag
 amazon_tld: com
 shorten_links: false
-bitly_token: ''
+bitly_token: ""
 group_replacement_message: |-
   Message by {USER} with Amazon affiliate link:
 
@@ -25,7 +25,6 @@ check_for_redirects_chains: false
 max_redirect_chains: 2
 ignore_users: []
 log_level: info
-
 ```
 
 **Note**: _This is just an example, don't copy and paste it! Create your own!_
@@ -80,14 +79,15 @@ If `check_for_redirects_chains` is enabled, it will limit the number of redirect
 ### Option: `ignore_users`
 
 A list of usernames (starting with the "@" character) and numeric user IDs whose messages won't be acted upon by the bot, even if they contain matching Amazon links. A valid list would be:
+
 ```yaml
 ignore_users:
     - @Yourusername
     - 12345678
     - @IgnoreMeAsWell123
 ```
-Numeric user IDs are useful for users who do not have Telegram user names defined. You can get yours by contacting [userinfobot](https://t.me/useridinfobot).
 
+Numeric user IDs are useful for users who do not have Telegram user names defined. You can get yours by contacting [userinfobot](https://t.me/useridinfobot).
 
 ## Changelog & Releases
 
@@ -99,12 +99,10 @@ Releases are based on [Semantic Versioning][semver], and use the format
 of `MAJOR.MINOR.PATCH`. In a nutshell, the version will be incremented
 based on the following:
 
--   `MAJOR`: Incompatible or major changes.
--   `MINOR`: Backwards-compatible new features and enhancements.
--   `PATCH`: Backwards-compatible bugfixes and package updates.
+- `MAJOR`: Incompatible or major changes.
+- `MINOR`: Backwards-compatible new features and enhancements.
+- `PATCH`: Backwards-compatible bugfixes and package updates.
 
 [keepchangelog]: http://keepachangelog.com/en/1.0.0/
-
 [releases]: https://github.com/marciogranzotto/addon-telegram-bot-amazon/releases
-
 [repository]: https://github.com/marciogranzotto/addons-repository
