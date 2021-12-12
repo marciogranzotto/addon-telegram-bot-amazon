@@ -3,22 +3,9 @@ name: Test Docker build
 on: [pull_request]
 
 jobs:
-  dockerlint:
-    name: Dockerfile linter
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: hadolint
-        run: docker run --rm -i hadolint/hadolint < telegram-bot-amazon/Dockerfile
-  markdown-link-check:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@master
-      - uses: gaurav-nelson/github-action-markdown-link-check@v1
   build-amd64:
     name: Build amd64 image
     runs-on: ubuntu-latest
-    needs: [dockerlint, markdown-link-check]
     steps:
       - uses: actions/checkout@v2
       - name: Patch files
@@ -33,7 +20,6 @@ jobs:
   build-aarch64:
     name: Build aarch64 image
     runs-on: ubuntu-latest
-    needs: [dockerlint, markdown-link-check]
     steps:
       - uses: actions/checkout@v2
       - name: Patch files
@@ -48,7 +34,6 @@ jobs:
   build-armv7:
     name: Build armv7 image
     runs-on: ubuntu-latest
-    needs: [dockerlint, markdown-link-check]
     steps:
       - uses: actions/checkout@v2
       - name: Patch files
@@ -63,7 +48,6 @@ jobs:
   build-armhf:
     name: Build armhf image
     runs-on: ubuntu-latest
-    needs: [dockerlint, markdown-link-check]
     steps:
       - uses: actions/checkout@v2
       - name: Patch files
@@ -78,7 +62,6 @@ jobs:
   build-i386:
     name: Build i386 image
     runs-on: ubuntu-latest
-    needs: [dockerlint, markdown-link-check]
     steps:
       - uses: actions/checkout@v2
       - name: Patch files

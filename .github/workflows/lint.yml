@@ -28,3 +28,15 @@ jobs:
           github_token: ${{ secrets.github_token }}
           eslint: true
           prettier: true
+  dockerlint:
+    name: Dockerfile linter
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: hadolint
+        run: docker run --rm -i hadolint/hadolint < telegram-bot-amazon/Dockerfile
+  markdown-link-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - uses: gaurav-nelson/github-action-markdown-link-check@v1
