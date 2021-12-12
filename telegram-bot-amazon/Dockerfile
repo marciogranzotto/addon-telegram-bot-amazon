@@ -9,6 +9,7 @@ ENV LANG C.UTF-8
 COPY app /app
 WORKDIR /app
 
+# hadolint ignore=DL3008
 RUN \
     URL="http://archive.ubuntu.com/ubuntu/" \
     && if [ "${BUILD_ARCH}" = "aarch64" ]; then \
@@ -23,7 +24,6 @@ RUN \
     && curl -sL "https://deb.nodesource.com/setup_15.x" | bash - \
     && apt-get update \
     && apt-get install -y --no-install-recommends \
-    # hadolint ignore=DDL3008 
         nodejs \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* \
