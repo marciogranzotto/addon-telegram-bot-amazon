@@ -1,0 +1,63 @@
+#!/usr/bin/with-contenv bashio
+# shellcheck disable=SC2191
+# ==============================================================================
+# Home Assistant Add-on: Telegram-Bot-Amazon
+# Runs Telegram-Bot-Amazon
+# ==============================================================================
+declare -a options
+
+# Wait for MongoDB to become availablex
+bashio::log.info 'Starting the Telegram-Bot-Amazon server...'
+
+# Config server variables
+readonly telegram_token=$(bashio::config 'telegram_token')
+bashio::log.debug "Setting up API KEY: ${telegram_token}"
+
+readonly amazon_tag=$(bashio::config 'amazon_tag')
+readonly amazon_tld=$(bashio::config 'amazon_tld')
+readonly group_replacement_message=$(bashio::config 'group_replacement_message')
+readonly max_redirect_chains=$(bashio::config 'max_redirect_chains')
+readonly ignore_users=$(bashio::config 'ignore_users')
+
+export TELEGRAM_BOT_TOKEN="${telegram_token}"
+export AMAZON_TAG="${amazon_tag}"
+export AMAZON_TLD="${amazon_tld}"
+export GROUP_REPLACEMENT_MESSAGE="${group_replacement_message}"
+export MAX_REDIRECT_CHAIN_DEPTH="${max_redirect_chains}"
+export IGNORE_USERS="${ignore_users}"
+
+if bashio::config.has_value 'auth_default_roles'; then
+    readonly auth_default_roles=$(bashio::config 'auth_default_roles')
+    export AUTH_DEFAULT_ROLES="${auth_default_roles}"
+fi
+
+if bashio::config.has_value 'shorten_links'; then
+    readonly shorten_links=$(bashio::config 'shorten_links')
+    export SHORTEN_LINKS="${shorten_links}"
+fi
+
+if bashio::config.has_value 'bitly_token'; then
+    readonly bitly_token=$(bashio::config 'bitly_token')
+    export BITLY_TOKEN="${bitly_token}"
+fi
+
+if bashio::config.has_value 'raw_links'; then
+    readonly raw_links=$(bashio::config 'raw_links')
+    export RAW_LINKS="${raw_links}"
+fi
+
+if bashio::config.has_value 'check_for_redirects'; then
+    readonly check_for_redirects=$(bashio::config 'check_for_redirects')
+    export CHECK_FOR_REDIRECTS="${check_for_redirects}"
+fi
+
+if bashio::config.has_value 'check_for_redirects_chains'; then
+    readonly check_for_redirects_chains=$(bashio::config 'check_for_redirects_chains')
+    export CHECK_FOR_REDIRECT_CHAINS="${check_for_redirects_chains}"
+fi
+
+# Change current working directory
+cd /app || bashio::exit.nok 'Failed changing working directory'
+
+# Run Telegram-Bot-Amazon server
+exec node index.js

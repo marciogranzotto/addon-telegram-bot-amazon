@@ -8,9 +8,13 @@ License: MIT
 const TelegramBot = require("node-telegram-bot-api");
 const fetch = require("node-fetch");
 
-const fullURLRegex = /https?:\/\/(([^\s]*)\.)?amazon\.([a-z.]{2,5})(\/d\/([^\s]*)|\/([^\s]*)\/?(?:dp|o|gp|-)\/)(aw\/d\/|product\/)?(B[0-9]{2}[0-9A-Z]{7}|[0-9]{9}(?:X|[0-9]))([^\s]*)/gi;
+const fullURLRegex = /https?:\/\/(([^\s]*)\.)?amazon\.([a-z.]{2,5}){1,2}(\/d\/([^\s]*)|\/([^\s]*)\/?(?:dp|o|gp|-)\/)(aw\/d\/|product\/)?(B[0-9]{2}[0-9A-Z]{7}|[0-9]{9}(?:X|[0-9]))([^\s]*)/gi;
 const shortURLRegex = /https?:\/\/(([^\s]*)\.)?amzn\.to\/([0-9A-Za-z]+)/gi;
 const URLRegex = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)/gi;
+
+function regExpEscape(literal_string) {
+  return literal_string.replace(/[-[\]{}()*+!<=:?.\/\\^$|#\s,]/g, '\\$&');
+}
 
 if (!process.env.TELEGRAM_BOT_TOKEN) {
   console.log("Missing TELEGRAM_BOT_TOKEN env variable");
@@ -64,7 +68,7 @@ if (!process.env.AMAZON_TLD) {
 const token = process.env.TELEGRAM_BOT_TOKEN;
 const amazon_tag = process.env.AMAZON_TAG;
 const rawUrlRegex = new RegExp(
-  `https?://(([^\\s]*)\\.)?amazon\\.${amazon_tld}/?([^\\s]*)`,
+  `https?://(([^\\s]*)\\.)?amazon\\.${regExpEscape(amazon_tld)}/?([^\\s]*)`,
   "ig"
 );
 
@@ -195,8 +199,10 @@ function deleteAndSend(msg, text) {
     : {};
 
   if (msg.captionSavedAsText && isGroup(chat)) {
+    log(`Sending message with photo: ${text}`);
     bot.sendPhoto(chatId, msg.photo[0].file_id, { ...options, caption: text });
   } else {
+    log(`Sending messag: ${text}`);
     bot.sendMessage(chatId, text, options);
   }
 
@@ -295,6 +301,9 @@ bot.on("message", async (msg) => {
             log(`Found non-Amazon URL ${match[0]}`);
             let longURL = await getLongUrl(match[0]);
             longURLReplacements.push(longURL);
+          } else {
+            log(`Found Amazon URL ${match[0]}`);
+            log(`Raw regex match: ${rawUrlRegex.exec(match[0])}`);
           }
         }
 
